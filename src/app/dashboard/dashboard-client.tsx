@@ -159,6 +159,40 @@ export default function DashboardClient({ user }: DashboardClientProps) {
     })
   }
 
+  const broadcastMessage = async () => {
+    if (participants.length === 0) {
+      alert('Aucun participant à qui envoyer le message')
+      return
+    }
+
+    if (!confirm(`Êtes-vous sûr de vouloir envoyer le message promotionnel à tous les ${participants.length} participants ?`)) {
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/broadcast', {
+        method: 'POST'
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success) {
+          alert(`Message envoyé avec succès à ${data.successCount}/${data.totalParticipants} participants`)
+        } else {
+          alert(`Erreur: ${data.message}`)
+        }
+      } else {
+        alert('Erreur lors de l\'envoi du message')
+      }
+    } catch (error) {
+      console.error('Erreur lors du broadcast:', error)
+      alert('Erreur lors de l\'envoi du message')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const handleLogout = async () => {
     setIsLoading(true)
     await supabase.auth.signOut()
@@ -310,6 +344,38 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                   🗑️ Vider la liste
                 </Button>
               </div>
+            </div>
+          </div>
+
+          {/* Broadcast Message */}
+          <div className="mb-8">
+            <div className="bg-white shadow rounded-lg p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">
+                📢 Message Promotionnel
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Envoyez le message promotionnel OscarSpin avec photo à tous les participants inscrits
+              </p>
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <span className="text-orange-600 font-bold text-lg">⚠️</span>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm text-orange-800">
+                      <strong>Attention:</strong> Ce message sera envoyé à tous les {participants.length} participants.<br/>
+                      Assurez-vous d&apos;avoir l&apos;autorisation avant d&apos;envoyer des messages promotionnels.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                onClick={broadcastMessage}
+                className="bg-purple-600 hover:bg-purple-700"
+                disabled={participants.length === 0 || isLoading}
+              >
+                {isLoading ? '📤 Envoi en cours...' : '📤 Envoyer Message Promo'}
+              </Button>
             </div>
           </div>
 
