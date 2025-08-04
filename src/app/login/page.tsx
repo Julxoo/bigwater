@@ -29,7 +29,7 @@ export default function LoginPage() {
       } else {
         router.push('/dashboard')
       }
-    } catch (err) {
+    } catch {
       setError('Une erreur inattendue s\'est produite')
     } finally {
       setIsLoading(false)

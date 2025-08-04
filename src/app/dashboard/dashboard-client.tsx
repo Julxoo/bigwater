@@ -117,7 +117,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
               <h1 className="text-3xl font-bold text-gray-900">
-                Panneau d'accueil
+                Panneau d&apos;accueil
               </h1>
             </div>
             <div className="flex items-center space-x-4">
@@ -146,7 +146,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
                 Bienvenue sur votre tableau de bord !
               </h2>
               <p className="text-gray-600 mb-8">
-                Votre interface d'administration est prête. Vous pouvez maintenant commencer à développer vos fonctionnalités.
+                Votre interface d&apos;administration est prête. Vous pouvez maintenant commencer à développer vos fonctionnalités.
               </p>
               
               {/* Stats Card */}
