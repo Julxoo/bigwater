@@ -1,17 +1,17 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import DashboardClient from './dashboard-client'
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import DashboardClient from "./dashboard-client";
 
 export default async function Dashboard() {
-  const supabase = await createClient()
-  
+  const supabase = await createClient();
+
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login')
+    redirect("/login");
   }
 
-  return <DashboardClient user={user} />
+  return <DashboardClient />;
 }
