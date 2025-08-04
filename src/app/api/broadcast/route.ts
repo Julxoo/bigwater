@@ -72,7 +72,7 @@ Si t'es pas encore inscrit, voilà le lien du casino 🎰 :
 <a href="https://www.ontrklnk.com/visit/?bta=48158&nci=6538&afp10=Telegram&utm_campaign=TG">OscarSpin Casino</a>`;
 
     // URL de l'image (vous pouvez changer cette URL)
-    const photoUrl = "https://i.postimg.cc/vcT5kGY7/image.png";
+    const photoUrl = "https://postimg.cc/cKxm9TRW";
 
     let successCount = 0;
     let failCount = 0;
