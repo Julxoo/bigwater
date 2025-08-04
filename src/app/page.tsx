@@ -9,7 +9,7 @@ export default async function Home() {
   } = await supabase.auth.getUser()
 
   if (user) {
-    redirect('/dashboard')
+    redirect('/wheel') // Redirection vers la roue (mode présentation)
   } else {
     redirect('/login')
   }
