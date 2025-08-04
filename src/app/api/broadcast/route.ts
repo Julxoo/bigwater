@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 // Fonction pour envoyer une photo avec un message Telegram
@@ -37,7 +37,7 @@ async function sendTelegramPhoto(chatId: number, photoUrl: string, caption: stri
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const supabase = await createClient();
 
