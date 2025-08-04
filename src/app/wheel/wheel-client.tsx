@@ -110,13 +110,18 @@ export default function WheelClient({ user }: WheelClientProps) {
                 🎡 Tirage au Sort
               </h1>
             </div>
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              className="bg-white/20 border-white/30 text-white hover:bg-white/30"
-            >
-              Déconnexion
-            </Button>
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-white/80">
+                Connecté en tant que <strong className="text-white">{user.email}</strong>
+              </span>
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                className="bg-white/20 border-white/30 text-white hover:bg-white/30"
+              >
+                Déconnexion
+              </Button>
+            </div>
           </div>
         </div>
       </header>
