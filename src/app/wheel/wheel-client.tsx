@@ -112,7 +112,8 @@ export default function WheelClient({ user }: WheelClientProps) {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-white/80">
-                Connecté en tant que <strong className="text-white">{user.email}</strong>
+                Connecté en tant que{" "}
+                <strong className="text-white">{user.email}</strong>
               </span>
               <Button
                 onClick={handleLogout}
