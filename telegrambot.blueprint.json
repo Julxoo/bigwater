@@ -1,0 +1,3307 @@
+{
+    "name": "Integration Telegram Bot",
+    "flow": [
+        {
+            "id": 2,
+            "module": "telegram:WatchUpdates",
+            "version": 1,
+            "parameters": {
+                "__IMTHOOK__": 2497061
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 150
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTHOOK__": {
+                            "data": {
+                                "editable": "false"
+                            },
+                            "label": "Tirage Barge Bot"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTHOOK__",
+                        "type": "hook:telegramapi",
+                        "label": "Webhook",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "update_id",
+                        "type": "number",
+                        "label": "Update ID"
+                    },
+                    {
+                        "name": "edited_channel_post",
+                        "spec": [
+                            {
+                                "name": "message_id",
+                                "type": "number",
+                                "label": "Message ID"
+                            },
+                            {
+                                "name": "sender_chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Sender Chat"
+                            },
+                            {
+                                "name": "chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Chat"
+                            },
+                            {
+                                "name": "date",
+                                "type": "number",
+                                "label": "Date"
+                            },
+                            {
+                                "name": "edit_date",
+                                "type": "number",
+                                "label": "Edit Date"
+                            },
+                            {
+                                "name": "text",
+                                "type": "text",
+                                "label": "Text"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Edited Channel Post"
+                    },
+                    {
+                        "name": "message",
+                        "spec": [
+                            {
+                                "name": "message_id",
+                                "type": "number",
+                                "label": "Message ID"
+                            },
+                            {
+                                "name": "from",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "User Name"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot?"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "From"
+                            },
+                            {
+                                "name": "chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "User Name"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "all_members_are_administrators",
+                                        "type": "boolean",
+                                        "label": "Has Group ‘All Members Are Admins’ Enabled?"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "invite_link",
+                                        "type": "text",
+                                        "label": "Invite link"
+                                    },
+                                    {
+                                        "name": "sticker_set_name",
+                                        "type": "text",
+                                        "label": "Sticker Set Name"
+                                    },
+                                    {
+                                        "name": "can_set_sticker_set",
+                                        "type": "boolean",
+                                        "label": "Can the Bot Change the Group Sticker Set?"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Chat"
+                            },
+                            {
+                                "name": "left_chat_participant",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Left Chat Participant"
+                            },
+                            {
+                                "name": "left_chat_member",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Left Chat Member"
+                            },
+                            {
+                                "name": "new_chat_participant",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "New Chat Participant"
+                            },
+                            {
+                                "name": "new_chat_member",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "New Chat Member"
+                            },
+                            {
+                                "name": "new_chat_members",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "New Chat Members"
+                            },
+                            {
+                                "name": "forward_from_chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "User Name"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "all_members_are_administrators",
+                                        "type": "boolean",
+                                        "label": "Has Group 'All Members Are Admins' Enabled?"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "invite_link",
+                                        "type": "text",
+                                        "label": "Invite link"
+                                    },
+                                    {
+                                        "name": "sticker_set_name",
+                                        "type": "text",
+                                        "label": "Sticker Set Name"
+                                    },
+                                    {
+                                        "name": "can_set_sticker_set",
+                                        "type": "boolean",
+                                        "label": "Can the Bot Change the Group Sticker Set?"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Forward from chat"
+                            },
+                            {
+                                "name": "forward_from_message_id",
+                                "type": "number",
+                                "label": "Forward from Message ID"
+                            },
+                            {
+                                "name": "date",
+                                "type": "date",
+                                "label": "Date"
+                            },
+                            {
+                                "name": "attachment",
+                                "spec": [
+                                    {
+                                        "name": "file_path",
+                                        "type": "text",
+                                        "label": "File Path"
+                                    },
+                                    {
+                                        "name": "file_name",
+                                        "type": "text",
+                                        "label": "File Name"
+                                    },
+                                    {
+                                        "name": "file_id",
+                                        "type": "text",
+                                        "label": "File ID"
+                                    },
+                                    {
+                                        "name": "file_size",
+                                        "type": "number",
+                                        "label": "File Size"
+                                    },
+                                    {
+                                        "name": "mime_type",
+                                        "type": "text",
+                                        "label": "Mime Type"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "performer",
+                                        "type": "text",
+                                        "label": "Performer"
+                                    },
+                                    {
+                                        "name": "duration",
+                                        "type": "number",
+                                        "label": "Duration"
+                                    },
+                                    {
+                                        "name": "width",
+                                        "type": "number",
+                                        "label": "Width"
+                                    },
+                                    {
+                                        "name": "height",
+                                        "type": "number",
+                                        "label": "Height"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Attachment"
+                            },
+                            {
+                                "name": "document",
+                                "spec": [
+                                    {
+                                        "name": "file_name",
+                                        "type": "text",
+                                        "label": "File Name"
+                                    },
+                                    {
+                                        "name": "file_id",
+                                        "type": "text",
+                                        "label": "File ID"
+                                    },
+                                    {
+                                        "name": "file_size",
+                                        "type": "number",
+                                        "label": "File Size"
+                                    },
+                                    {
+                                        "name": "mime_type",
+                                        "type": "text",
+                                        "label": "Mime Type"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Document/Image"
+                            },
+                            {
+                                "name": "photo",
+                                "spec": [
+                                    {
+                                        "name": "file_id",
+                                        "type": "text",
+                                        "label": "File ID"
+                                    },
+                                    {
+                                        "name": "file_size",
+                                        "type": "number",
+                                        "label": "File Size"
+                                    },
+                                    {
+                                        "name": "width",
+                                        "type": "uinteger",
+                                        "label": "Width"
+                                    },
+                                    {
+                                        "name": "height",
+                                        "type": "uinteger",
+                                        "label": "Height"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "Photo"
+                            },
+                            {
+                                "name": "caption",
+                                "type": "text",
+                                "label": "Caption"
+                            },
+                            {
+                                "name": "text",
+                                "type": "text",
+                                "label": "Text"
+                            },
+                            {
+                                "name": "sender_chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Sender Chat"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Message"
+                    },
+                    {
+                        "name": "edited_message",
+                        "spec": [
+                            {
+                                "name": "message_id",
+                                "type": "number",
+                                "label": "Message ID"
+                            },
+                            {
+                                "name": "from",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "User Name"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot?"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "From"
+                            },
+                            {
+                                "name": "chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "User Name"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "all_members_are_administrators",
+                                        "type": "boolean",
+                                        "label": "Has Group ‘All Members Are Admins’ Enabled?"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "invite_link",
+                                        "type": "text",
+                                        "label": "Invite link"
+                                    },
+                                    {
+                                        "name": "sticker_set_name",
+                                        "type": "text",
+                                        "label": "Sticker Set Name"
+                                    },
+                                    {
+                                        "name": "can_set_sticker_set",
+                                        "type": "boolean",
+                                        "label": "Can the Bot Change the Group Sticker Set?"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Chat"
+                            },
+                            {
+                                "name": "forward_from_chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "User Name"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "all_members_are_administrators",
+                                        "type": "boolean",
+                                        "label": "Has Group ‘All Members Are Admins’ Enabled?"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "invite_link",
+                                        "type": "text",
+                                        "label": "Invite link"
+                                    },
+                                    {
+                                        "name": "sticker_set_name",
+                                        "type": "text",
+                                        "label": "Sticker Set Name"
+                                    },
+                                    {
+                                        "name": "can_set_sticker_set",
+                                        "type": "boolean",
+                                        "label": "Can the Bot Change the Group Sticker Set?"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Forward from chat"
+                            },
+                            {
+                                "name": "forward_from_message_id",
+                                "type": "number",
+                                "label": "Forward from Message ID"
+                            },
+                            {
+                                "name": "date",
+                                "type": "date",
+                                "label": "Date"
+                            },
+                            {
+                                "name": "attachment",
+                                "spec": [
+                                    {
+                                        "name": "file_path",
+                                        "type": "text",
+                                        "label": "File Path"
+                                    },
+                                    {
+                                        "name": "file_name",
+                                        "type": "text",
+                                        "label": "File Name"
+                                    },
+                                    {
+                                        "name": "file_id",
+                                        "type": "text",
+                                        "label": "File ID"
+                                    },
+                                    {
+                                        "name": "file_size",
+                                        "type": "number",
+                                        "label": "File Size"
+                                    },
+                                    {
+                                        "name": "mime_type",
+                                        "type": "text",
+                                        "label": "Mime Type"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "performer",
+                                        "type": "text",
+                                        "label": "Performer"
+                                    },
+                                    {
+                                        "name": "duration",
+                                        "type": "number",
+                                        "label": "Duration"
+                                    },
+                                    {
+                                        "name": "width",
+                                        "type": "number",
+                                        "label": "Width"
+                                    },
+                                    {
+                                        "name": "height",
+                                        "type": "number",
+                                        "label": "Height"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Attachment"
+                            },
+                            {
+                                "name": "document",
+                                "spec": [
+                                    {
+                                        "name": "file_name",
+                                        "type": "text",
+                                        "label": "File Name"
+                                    },
+                                    {
+                                        "name": "file_id",
+                                        "type": "text",
+                                        "label": "File ID"
+                                    },
+                                    {
+                                        "name": "file_size",
+                                        "type": "number",
+                                        "label": "File Size"
+                                    },
+                                    {
+                                        "name": "mime_type",
+                                        "type": "text",
+                                        "label": "Mime Type"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Document/Image"
+                            },
+                            {
+                                "name": "photo",
+                                "spec": [
+                                    {
+                                        "name": "file_id",
+                                        "type": "text",
+                                        "label": "File ID"
+                                    },
+                                    {
+                                        "name": "file_size",
+                                        "type": "number",
+                                        "label": "File Size"
+                                    },
+                                    {
+                                        "name": "width",
+                                        "type": "uinteger",
+                                        "label": "Width"
+                                    },
+                                    {
+                                        "name": "height",
+                                        "type": "uinteger",
+                                        "label": "Height"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "Photo"
+                            },
+                            {
+                                "name": "caption",
+                                "type": "text",
+                                "label": "Caption"
+                            },
+                            {
+                                "name": "text",
+                                "type": "text",
+                                "label": "Text"
+                            },
+                            {
+                                "name": "sender_chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Sender Chat"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Edited Message"
+                    },
+                    {
+                        "name": "channel_post",
+                        "spec": [
+                            {
+                                "name": "message_id",
+                                "type": "number",
+                                "label": "Message ID"
+                            },
+                            {
+                                "name": "from",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "User Name"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot?"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "From"
+                            },
+                            {
+                                "name": "chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "User Name"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "all_members_are_administrators",
+                                        "type": "boolean",
+                                        "label": "Has Group ‘All Members Are Admins’ Enabled?"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "invite_link",
+                                        "type": "text",
+                                        "label": "Invite link"
+                                    },
+                                    {
+                                        "name": "sticker_set_name",
+                                        "type": "text",
+                                        "label": "Sticker Set Name"
+                                    },
+                                    {
+                                        "name": "can_set_sticker_set",
+                                        "type": "boolean",
+                                        "label": "Can the Bot Change the Group Sticker Set?"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Chat"
+                            },
+                            {
+                                "name": "date",
+                                "type": "number",
+                                "label": "Date"
+                            },
+                            {
+                                "name": "attachment",
+                                "spec": [
+                                    {
+                                        "name": "file_name",
+                                        "type": "text",
+                                        "label": "File Name"
+                                    },
+                                    {
+                                        "name": "file_id",
+                                        "type": "text",
+                                        "label": "File ID"
+                                    },
+                                    {
+                                        "name": "file_size",
+                                        "type": "number",
+                                        "label": "File Size"
+                                    },
+                                    {
+                                        "name": "mime_type",
+                                        "type": "text",
+                                        "label": "Mime Type"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "performer",
+                                        "type": "text",
+                                        "label": "Performer"
+                                    },
+                                    {
+                                        "name": "duration",
+                                        "type": "number",
+                                        "label": "Duration"
+                                    },
+                                    {
+                                        "name": "width",
+                                        "type": "number",
+                                        "label": "Width"
+                                    },
+                                    {
+                                        "name": "height",
+                                        "type": "number",
+                                        "label": "Height"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Attachment"
+                            },
+                            {
+                                "name": "document",
+                                "spec": [
+                                    {
+                                        "name": "file_name",
+                                        "type": "text",
+                                        "label": "File Name"
+                                    },
+                                    {
+                                        "name": "file_id",
+                                        "type": "text",
+                                        "label": "File ID"
+                                    },
+                                    {
+                                        "name": "file_size",
+                                        "type": "number",
+                                        "label": "File Size"
+                                    },
+                                    {
+                                        "name": "mime_type",
+                                        "type": "text",
+                                        "label": "Mime Type"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Document/Image"
+                            },
+                            {
+                                "name": "photo",
+                                "spec": [
+                                    {
+                                        "name": "file_id",
+                                        "type": "text",
+                                        "label": "File ID"
+                                    },
+                                    {
+                                        "name": "file_size",
+                                        "type": "number",
+                                        "label": "File Size"
+                                    },
+                                    {
+                                        "name": "width",
+                                        "type": "uinteger",
+                                        "label": "Width"
+                                    },
+                                    {
+                                        "name": "height",
+                                        "type": "uinteger",
+                                        "label": "Height"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "Photo"
+                            },
+                            {
+                                "name": "caption",
+                                "type": "text",
+                                "label": "Caption"
+                            },
+                            {
+                                "name": "text",
+                                "type": "text",
+                                "label": "Text"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Channel post"
+                    },
+                    {
+                        "name": "callback_query",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "from",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot?"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "language_code",
+                                        "type": "text",
+                                        "label": "Language Code"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "From"
+                            },
+                            {
+                                "name": "message",
+                                "spec": [
+                                    {
+                                        "name": "message_id",
+                                        "type": "number",
+                                        "label": "Message ID"
+                                    },
+                                    {
+                                        "name": "from",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "number",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "is_bot",
+                                                "type": "boolean",
+                                                "label": "Is Bot?"
+                                            },
+                                            {
+                                                "name": "first_name",
+                                                "type": "text",
+                                                "label": "First Name"
+                                            },
+                                            {
+                                                "name": "username",
+                                                "type": "text",
+                                                "label": "Last Name"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "From"
+                                    },
+                                    {
+                                        "name": "chat",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "number",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "first_name",
+                                                "type": "text",
+                                                "label": "First Name"
+                                            },
+                                            {
+                                                "name": "last_name",
+                                                "type": "text",
+                                                "label": "Last Name"
+                                            },
+                                            {
+                                                "name": "type",
+                                                "type": "text",
+                                                "label": "Type"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Chat"
+                                    },
+                                    {
+                                        "name": "date",
+                                        "type": "number",
+                                        "label": "Date"
+                                    },
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Message"
+                            },
+                            {
+                                "name": "chat_instance",
+                                "type": "text",
+                                "label": "Chat Instance"
+                            },
+                            {
+                                "name": "data",
+                                "type": "text",
+                                "label": "Data"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Callback Query"
+                    },
+                    {
+                        "name": "pre_checkout_query",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "from",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot?"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    },
+                                    {
+                                        "name": "language_code",
+                                        "type": "text",
+                                        "label": "Language Code"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "From"
+                            },
+                            {
+                                "name": "currency",
+                                "type": "text",
+                                "label": "Currency"
+                            },
+                            {
+                                "name": "total_amount",
+                                "type": "number",
+                                "label": "Total Amount"
+                            },
+                            {
+                                "name": "invoice_payload",
+                                "type": "text",
+                                "label": "Invoice Payload"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Pre-checkout Query"
+                    },
+                    {
+                        "name": "inline_query",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "from",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is bot?"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "language_code",
+                                        "type": "text",
+                                        "label": "Language Code"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "From"
+                            },
+                            {
+                                "name": "query",
+                                "type": "text",
+                                "label": "Query"
+                            },
+                            {
+                                "name": "offset",
+                                "type": "number",
+                                "label": "Offset"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Inline Query"
+                    },
+                    {
+                        "name": "business_message",
+                        "spec": [
+                            {
+                                "name": "business_connection_id",
+                                "type": "text",
+                                "label": "Business Connection ID"
+                            },
+                            {
+                                "name": "message_id",
+                                "type": "uinteger",
+                                "label": "Message ID"
+                            },
+                            {
+                                "name": "from",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "uinteger",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    },
+                                    {
+                                        "name": "is_premium",
+                                        "type": "boolean",
+                                        "label": "Is Premium"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "From"
+                            },
+                            {
+                                "name": "chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "uinteger",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Chat"
+                            },
+                            {
+                                "name": "date",
+                                "type": "date",
+                                "label": "Date"
+                            },
+                            {
+                                "name": "text",
+                                "type": "text",
+                                "label": "Text"
+                            },
+                            {
+                                "name": "attachment",
+                                "spec": [
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Attachment"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Business Message"
+                    },
+                    {
+                        "name": "my_chat_member",
+                        "spec": [
+                            {
+                                "name": "chat",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "title",
+                                        "type": "text",
+                                        "label": "Title"
+                                    },
+                                    {
+                                        "name": "is_forum",
+                                        "type": "boolean",
+                                        "label": "Is Forum"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Chat"
+                            },
+                            {
+                                "name": "from",
+                                "spec": [
+                                    {
+                                        "name": "id",
+                                        "type": "number",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "is_bot",
+                                        "type": "boolean",
+                                        "label": "Is Bot"
+                                    },
+                                    {
+                                        "name": "first_name",
+                                        "type": "text",
+                                        "label": "First Name"
+                                    },
+                                    {
+                                        "name": "last_name",
+                                        "type": "text",
+                                        "label": "Last Name"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "type": "text",
+                                        "label": "Username"
+                                    },
+                                    {
+                                        "name": "language_code",
+                                        "type": "text",
+                                        "label": "Language Code"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "From"
+                            },
+                            {
+                                "name": "date",
+                                "type": "date",
+                                "label": "Date"
+                            },
+                            {
+                                "name": "old_chat_member",
+                                "spec": [
+                                    {
+                                        "name": "user",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "number",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "is_bot",
+                                                "type": "boolean",
+                                                "label": "Is Bot"
+                                            },
+                                            {
+                                                "name": "first_name",
+                                                "type": "text",
+                                                "label": "First Name"
+                                            },
+                                            {
+                                                "name": "username",
+                                                "type": "text",
+                                                "label": "Username"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "User"
+                                    },
+                                    {
+                                        "name": "status",
+                                        "type": "text",
+                                        "label": "Status"
+                                    },
+                                    {
+                                        "name": "can_be_edited",
+                                        "type": "boolean",
+                                        "label": "Can be Edited"
+                                    },
+                                    {
+                                        "name": "can_manage_chat",
+                                        "type": "boolean",
+                                        "label": "Can Manage Chat"
+                                    },
+                                    {
+                                        "name": "can_change_info",
+                                        "type": "boolean",
+                                        "label": "Can Change Info"
+                                    },
+                                    {
+                                        "name": "can_delete_messages",
+                                        "type": "boolean",
+                                        "label": "Can Delete Messages"
+                                    },
+                                    {
+                                        "name": "can_invite_users",
+                                        "type": "boolean",
+                                        "label": "Can Invite Users"
+                                    },
+                                    {
+                                        "name": "can_restrict_members",
+                                        "type": "boolean",
+                                        "label": "Can Restrict Members"
+                                    },
+                                    {
+                                        "name": "can_pin_messages",
+                                        "type": "boolean",
+                                        "label": "Can Pin Messages"
+                                    },
+                                    {
+                                        "name": "can_manage_topics",
+                                        "type": "boolean",
+                                        "label": "Can Manage Topics"
+                                    },
+                                    {
+                                        "name": "can_promote_members",
+                                        "type": "boolean",
+                                        "label": "Can Promote Members"
+                                    },
+                                    {
+                                        "name": "can_manage_video_chats",
+                                        "type": "boolean",
+                                        "label": "Can Manage Video Chats"
+                                    },
+                                    {
+                                        "name": "can_post_stories",
+                                        "type": "boolean",
+                                        "label": "Can Post Stories"
+                                    },
+                                    {
+                                        "name": "can_edit_stories",
+                                        "type": "boolean",
+                                        "label": "Can Edit Stories"
+                                    },
+                                    {
+                                        "name": "can_delete_stories",
+                                        "type": "boolean",
+                                        "label": "Can Delete Stories"
+                                    },
+                                    {
+                                        "name": "is_anonymous",
+                                        "type": "boolean",
+                                        "label": "Is Anonymous"
+                                    },
+                                    {
+                                        "name": "can_manage_voice_chats",
+                                        "type": "boolean",
+                                        "label": "Can Manage Voice Chats"
+                                    },
+                                    {
+                                        "name": "custom_title",
+                                        "type": "text",
+                                        "label": "Custom Title"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Old Chat Member"
+                            },
+                            {
+                                "name": "new_chat_member",
+                                "spec": [
+                                    {
+                                        "name": "user",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "number",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "is_bot",
+                                                "type": "boolean",
+                                                "label": "Is Bot"
+                                            },
+                                            {
+                                                "name": "first_name",
+                                                "type": "text",
+                                                "label": "First Name"
+                                            },
+                                            {
+                                                "name": "username",
+                                                "type": "text",
+                                                "label": "Username"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "User"
+                                    },
+                                    {
+                                        "name": "status",
+                                        "type": "text",
+                                        "label": "Status"
+                                    },
+                                    {
+                                        "name": "can_be_edited",
+                                        "type": "boolean",
+                                        "label": "Can be Edited"
+                                    },
+                                    {
+                                        "name": "can_manage_chat",
+                                        "type": "boolean",
+                                        "label": "Can Manage Chat"
+                                    },
+                                    {
+                                        "name": "can_change_info",
+                                        "type": "boolean",
+                                        "label": "Can Change Info"
+                                    },
+                                    {
+                                        "name": "can_delete_messages",
+                                        "type": "boolean",
+                                        "label": "Can Delete Messages"
+                                    },
+                                    {
+                                        "name": "can_invite_users",
+                                        "type": "boolean",
+                                        "label": "Can Invite Users"
+                                    },
+                                    {
+                                        "name": "can_restrict_members",
+                                        "type": "boolean",
+                                        "label": "Can Restrict Members"
+                                    },
+                                    {
+                                        "name": "can_pin_messages",
+                                        "type": "boolean",
+                                        "label": "Can Pin Messages"
+                                    },
+                                    {
+                                        "name": "can_manage_topics",
+                                        "type": "boolean",
+                                        "label": "Can Manage Topics"
+                                    },
+                                    {
+                                        "name": "can_promote_members",
+                                        "type": "boolean",
+                                        "label": "Can Promote Members"
+                                    },
+                                    {
+                                        "name": "can_manage_video_chats",
+                                        "type": "boolean",
+                                        "label": "Can Manage Video Chats"
+                                    },
+                                    {
+                                        "name": "can_post_stories",
+                                        "type": "boolean",
+                                        "label": "Can Post Stories"
+                                    },
+                                    {
+                                        "name": "can_edit_stories",
+                                        "type": "boolean",
+                                        "label": "Can Edit Stories"
+                                    },
+                                    {
+                                        "name": "can_delete_stories",
+                                        "type": "boolean",
+                                        "label": "Can Delete Stories"
+                                    },
+                                    {
+                                        "name": "is_anonymous",
+                                        "type": "boolean",
+                                        "label": "Is Anonymous"
+                                    },
+                                    {
+                                        "name": "can_manage_voice_chats",
+                                        "type": "boolean",
+                                        "label": "Can Manage Voice Chats"
+                                    },
+                                    {
+                                        "name": "custom_title",
+                                        "type": "text",
+                                        "label": "Custom Title"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "New Chat Member"
+                            },
+                            {
+                                "name": "attachment",
+                                "spec": [
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "label": "Type"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Attachment"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "My Chat Member"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 11,
+            "module": "google-sheets:filterRows",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 8862198
+            },
+            "filter": {
+                "name": "Messages GO seulement",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{2.message.text}}",
+                            "b": "GO",
+                            "o": "text:equal:ci"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "from": "drive",
+                "filter": [
+                    [
+                        {
+                            "a": "B",
+                            "b": "{{2.message.from.id}}",
+                            "o": "text:equal"
+                        }
+                    ]
+                ],
+                "sheetId": "Participants du jour",
+                "sortOrder": "asc",
+                "spreadsheetId": "1fY5npum6pB_kiANa_-HNwh_XVlZhyzUm8aXa4eIzWbI",
+                "tableFirstRow": "A1:CZ1",
+                "includesHeaders": true,
+                "valueRenderOption": "FORMATTED_VALUE",
+                "dateTimeRenderOption": "FORMATTED_STRING"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 150
+                },
+                "restore": {
+                    "expect": {
+                        "from": {
+                            "label": "Select from My Drive"
+                        },
+                        "filter": {
+                            "label": []
+                        },
+                        "orderBy": {
+                            "mode": "chose"
+                        },
+                        "sheetId": {
+                            "mode": "chose",
+                            "label": "Participants du jour"
+                        },
+                        "sortOrder": {
+                            "mode": "chose",
+                            "label": "Ascending"
+                        },
+                        "spreadsheetId": {
+                            "mode": "chose",
+                            "label": "GrattteurBarge"
+                        },
+                        "tableFirstRow": {
+                            "label": "A-CZ"
+                        },
+                        "includesHeaders": {
+                            "mode": "chose",
+                            "label": "Yes"
+                        },
+                        "valueRenderOption": {
+                            "mode": "chose",
+                            "label": "Formatted value"
+                        },
+                        "dateTimeRenderOption": {
+                            "mode": "chose",
+                            "label": "Formatted string"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            },
+                            "label": "My Google connection"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "from",
+                        "type": "select",
+                        "label": "Search Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "drive",
+                                "share"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "valueRenderOption",
+                        "type": "select",
+                        "label": "Value render option",
+                        "validate": {
+                            "enum": [
+                                "FORMATTED_VALUE",
+                                "UNFORMATTED_VALUE",
+                                "FORMULA"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "dateTimeRenderOption",
+                        "type": "select",
+                        "label": "Date and time render option",
+                        "validate": {
+                            "enum": [
+                                "SERIAL_NUMBER",
+                                "FORMATTED_STRING"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit"
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "select",
+                        "label": "Spreadsheet ID",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "select",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "includesHeaders",
+                        "type": "select",
+                        "label": "Table contains headers",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tableFirstRow",
+                        "type": "select",
+                        "label": "Column range",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "A1:Z1",
+                                "A1:BZ1",
+                                "A1:CZ1",
+                                "A1:DZ1",
+                                "A1:MZ1",
+                                "A1:ZZ1",
+                                "A1:AZZ1",
+                                "A1:BZZ1",
+                                "A1:CZZ1",
+                                "A1:DZZ1",
+                                "A1:MZZ1",
+                                "A1:ZZZ1"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "type": "filter",
+                        "label": "Filter",
+                        "options": "rpc://google-sheets/2/rpcGetFilterKeys?includesHeaders=true"
+                    },
+                    {
+                        "name": "orderBy",
+                        "type": "select",
+                        "label": "Order by"
+                    },
+                    {
+                        "name": "sortOrder",
+                        "type": "select",
+                        "label": "Sort order",
+                        "validate": {
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "parameters": {
+                "else": 1
+            },
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 150
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 7,
+                            "module": "telegram:SendPhoto",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 8862186
+                            },
+                            "filter": {
+                                "name": "Nouveau participant",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{11.`__IMTLENGTH__`}}",
+                                            "b": "0",
+                                            "o": "text:equal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "chatId": "{{2.message.chat.id}}",
+                                "caption": "",
+                                "httpUrl": "https://postimg.cc/vcT5kGY7",
+                                "sendType": "send_byurl",
+                                "parseMode": "",
+                                "contentType": "",
+                                "replyMarkup": "",
+                                "messageThreadId": "",
+                                "replyToMessageId": "",
+                                "replyMarkupAssembleType": "reply_markup_enter"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "sendType": {
+                                            "label": "HTTP URL"
+                                        },
+                                        "parseMode": {
+                                            "label": "Empty"
+                                        },
+                                        "contentType": {
+                                            "mode": "chose",
+                                            "label": "Empty"
+                                        },
+                                        "replyMarkupAssembleType": {
+                                            "label": "Enter the Reply Markup"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "telegram"
+                                            },
+                                            "label": "Tirage Barge Bot"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:telegram",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "chatId",
+                                        "type": "text",
+                                        "label": "Chat ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "messageThreadId",
+                                        "type": "number",
+                                        "label": "Message Thread ID"
+                                    },
+                                    {
+                                        "name": "caption",
+                                        "type": "text",
+                                        "label": "Caption"
+                                    },
+                                    {
+                                        "name": "sendType",
+                                        "type": "select",
+                                        "label": "Send by",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "send_bydata",
+                                                "send_byurl",
+                                                "send_byid"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseMode",
+                                        "type": "select",
+                                        "label": "Parse Mode",
+                                        "validate": {
+                                            "enum": [
+                                                "Markdown",
+                                                "HTML"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "disableNotification",
+                                        "type": "boolean",
+                                        "label": "Disable Notifications"
+                                    },
+                                    {
+                                        "name": "replyToMessageId",
+                                        "type": "number",
+                                        "label": "Original Message ID"
+                                    },
+                                    {
+                                        "name": "replyMarkupAssembleType",
+                                        "type": "select",
+                                        "label": "Enter/Assemble the Reply Markup Field",
+                                        "validate": {
+                                            "enum": [
+                                                "reply_markup_enter",
+                                                "reply_markup_assemble"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "contentType",
+                                        "type": "select",
+                                        "label": "Content Type"
+                                    },
+                                    {
+                                        "name": "httpUrl",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "replyMarkup",
+                                        "type": "text",
+                                        "label": "Reply Markup"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "message_id",
+                                        "type": "text",
+                                        "label": "Message ID"
+                                    },
+                                    {
+                                        "name": "date",
+                                        "type": "number",
+                                        "label": "Date timestamp"
+                                    },
+                                    {
+                                        "name": "chat",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "text",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "first_name",
+                                                "type": "text",
+                                                "label": "First name"
+                                            },
+                                            {
+                                                "name": "last_name",
+                                                "type": "text",
+                                                "label": "Last name"
+                                            },
+                                            {
+                                                "name": "type",
+                                                "type": "text",
+                                                "label": "Type"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Chat"
+                                    },
+                                    {
+                                        "name": "from",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "text",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "first_name",
+                                                "type": "text",
+                                                "label": "First name"
+                                            },
+                                            {
+                                                "name": "last_name",
+                                                "type": "text",
+                                                "label": "Last name"
+                                            },
+                                            {
+                                                "name": "is_bot",
+                                                "type": "boolean",
+                                                "label": "Is bot?"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "From"
+                                    },
+                                    {
+                                        "name": "photo",
+                                        "spec": [
+                                            {
+                                                "name": "file_id",
+                                                "type": "text",
+                                                "label": "File ID"
+                                            },
+                                            {
+                                                "name": "file_size",
+                                                "type": "number",
+                                                "label": "File size"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Photo"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 6,
+                            "module": "telegram:SendReplyMessage",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 8862186
+                            },
+                            "mapper": {
+                                "text": "✅ PARTICIPATION VALIDÉE ! \r\n\r\nRegarde le live pour voir le Gratteur Barge tourner la roue ! \r\n\r\n⚠️ Attention : Renvoyer \"GO\" plusieurs fois ne sert à rien !\r\n\r\nBonne chance ! 🍀",
+                                "chatId": "{{2.message.chat.id}}",
+                                "parseMode": "",
+                                "replyMarkup": "",
+                                "messageThreadId": "",
+                                "replyToMessageId": "",
+                                "replyMarkupAssembleType": "reply_markup_enter"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "parseMode": {
+                                            "label": "Empty"
+                                        },
+                                        "disableNotification": {
+                                            "mode": "chose"
+                                        },
+                                        "replyMarkupAssembleType": {
+                                            "label": "Enter the Reply Markup"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "telegram"
+                                            },
+                                            "label": "Tirage Barge Bot"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:telegram",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "chatId",
+                                        "type": "text",
+                                        "label": "Chat ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "messageThreadId",
+                                        "type": "number",
+                                        "label": "Message Thread ID"
+                                    },
+                                    {
+                                        "name": "parseMode",
+                                        "type": "select",
+                                        "label": "Parse Mode",
+                                        "validate": {
+                                            "enum": [
+                                                "Markdown",
+                                                "HTML"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "disableNotification",
+                                        "type": "boolean",
+                                        "label": "Disable Notifications"
+                                    },
+                                    {
+                                        "name": "disableWebPagePreview",
+                                        "type": "boolean",
+                                        "label": "Disable Link Previews"
+                                    },
+                                    {
+                                        "name": "replyToMessageId",
+                                        "type": "number",
+                                        "label": "Original Message ID"
+                                    },
+                                    {
+                                        "name": "replyMarkupAssembleType",
+                                        "type": "select",
+                                        "label": "Enter/Assemble the Reply Markup Field",
+                                        "validate": {
+                                            "enum": [
+                                                "reply_markup_enter",
+                                                "reply_markup_assemble"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "replyMarkup",
+                                        "type": "text",
+                                        "label": "Reply Markup"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "message_id",
+                                        "type": "number",
+                                        "label": "Message ID"
+                                    },
+                                    {
+                                        "name": "sender_chat",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "number",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "title",
+                                                "type": "text",
+                                                "label": "Title"
+                                            },
+                                            {
+                                                "name": "username",
+                                                "type": "text",
+                                                "label": "Username"
+                                            },
+                                            {
+                                                "name": "type",
+                                                "type": "text",
+                                                "label": "Type"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Sender Chat"
+                                    },
+                                    {
+                                        "name": "chat",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "number",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "title",
+                                                "type": "text",
+                                                "label": "Title"
+                                            },
+                                            {
+                                                "name": "username",
+                                                "type": "text",
+                                                "label": "Username"
+                                            },
+                                            {
+                                                "name": "type",
+                                                "type": "text",
+                                                "label": "Type"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Chat"
+                                    },
+                                    {
+                                        "name": "date",
+                                        "type": "number",
+                                        "label": "Date"
+                                    },
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text"
+                                    },
+                                    {
+                                        "name": "entities",
+                                        "spec": {
+                                            "spec": [
+                                                {
+                                                    "name": "offset",
+                                                    "type": "number",
+                                                    "label": "Offset"
+                                                },
+                                                {
+                                                    "name": "length",
+                                                    "type": "number",
+                                                    "label": "Length"
+                                                },
+                                                {
+                                                    "name": "type",
+                                                    "type": "text",
+                                                    "label": "Type"
+                                                }
+                                            ],
+                                            "type": "collection"
+                                        },
+                                        "type": "array",
+                                        "label": "Entities"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 5,
+                            "module": "google-sheets:addRow",
+                            "version": 2,
+                            "parameters": {
+                                "__IMTCONN__": 8862198
+                            },
+                            "filter": {
+                                "name": "",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{11.`__IMTLENGTH__`}}",
+                                            "b": "0",
+                                            "o": "text:equal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "from": "drive",
+                                "mode": "select",
+                                "values": {
+                                    "0": "{{2.message.from.first_name}} {{2.message.from.last_name}}",
+                                    "1": "{{2.message.from.id}}",
+                                    "2": "{{now}}",
+                                    "3": "Live-{{formatDate(now; \"YYYY-MM-DD\")}}"
+                                },
+                                "sheetId": "Participants du jour",
+                                "spreadsheetId": "/1fY5npum6pB_kiANa_-HNwh_XVlZhyzUm8aXa4eIzWbI",
+                                "includesHeaders": true,
+                                "insertDataOption": "INSERT_ROWS",
+                                "valueInputOption": "USER_ENTERED",
+                                "insertUnformatted": false
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "from": {
+                                            "label": "My Drive"
+                                        },
+                                        "mode": {
+                                            "label": "Search by path"
+                                        },
+                                        "sheetId": {
+                                            "label": "Participants du jour"
+                                        },
+                                        "spreadsheetId": {
+                                            "path": [
+                                                "GrattteurBarge"
+                                            ]
+                                        },
+                                        "includesHeaders": {
+                                            "label": "Yes",
+                                            "nested": [
+                                                {
+                                                    "name": "values",
+                                                    "spec": [
+                                                        {
+                                                            "name": "0",
+                                                            "type": "text",
+                                                            "label": "Username (A)"
+                                                        },
+                                                        {
+                                                            "name": "1",
+                                                            "type": "text",
+                                                            "label": "User ID (B)"
+                                                        },
+                                                        {
+                                                            "name": "2",
+                                                            "type": "text",
+                                                            "label": "Timestamp (C)"
+                                                        },
+                                                        {
+                                                            "name": "3",
+                                                            "type": "text",
+                                                            "label": "Live Session (D)"
+                                                        },
+                                                        {
+                                                            "name": "4",
+                                                            "type": "text",
+                                                            "label": "(E)"
+                                                        },
+                                                        {
+                                                            "name": "5",
+                                                            "type": "text",
+                                                            "label": "(F)"
+                                                        },
+                                                        {
+                                                            "name": "6",
+                                                            "type": "text",
+                                                            "label": "(G)"
+                                                        },
+                                                        {
+                                                            "name": "7",
+                                                            "type": "text",
+                                                            "label": "(H)"
+                                                        },
+                                                        {
+                                                            "name": "8",
+                                                            "type": "text",
+                                                            "label": "(I)"
+                                                        },
+                                                        {
+                                                            "name": "9",
+                                                            "type": "text",
+                                                            "label": "(J)"
+                                                        },
+                                                        {
+                                                            "name": "10",
+                                                            "type": "text",
+                                                            "label": "(K)"
+                                                        },
+                                                        {
+                                                            "name": "11",
+                                                            "type": "text",
+                                                            "label": "(L)"
+                                                        },
+                                                        {
+                                                            "name": "12",
+                                                            "type": "text",
+                                                            "label": "(M)"
+                                                        },
+                                                        {
+                                                            "name": "13",
+                                                            "type": "text",
+                                                            "label": "(N)"
+                                                        },
+                                                        {
+                                                            "name": "14",
+                                                            "type": "text",
+                                                            "label": "(O)"
+                                                        },
+                                                        {
+                                                            "name": "15",
+                                                            "type": "text",
+                                                            "label": "(P)"
+                                                        },
+                                                        {
+                                                            "name": "16",
+                                                            "type": "text",
+                                                            "label": "(Q)"
+                                                        },
+                                                        {
+                                                            "name": "17",
+                                                            "type": "text",
+                                                            "label": "(R)"
+                                                        },
+                                                        {
+                                                            "name": "18",
+                                                            "type": "text",
+                                                            "label": "(S)"
+                                                        },
+                                                        {
+                                                            "name": "19",
+                                                            "type": "text",
+                                                            "label": "(T)"
+                                                        },
+                                                        {
+                                                            "name": "20",
+                                                            "type": "text",
+                                                            "label": "(U)"
+                                                        },
+                                                        {
+                                                            "name": "21",
+                                                            "type": "text",
+                                                            "label": "(V)"
+                                                        },
+                                                        {
+                                                            "name": "22",
+                                                            "type": "text",
+                                                            "label": "(W)"
+                                                        },
+                                                        {
+                                                            "name": "23",
+                                                            "type": "text",
+                                                            "label": "(X)"
+                                                        },
+                                                        {
+                                                            "name": "24",
+                                                            "type": "text",
+                                                            "label": "(Y)"
+                                                        },
+                                                        {
+                                                            "name": "25",
+                                                            "type": "text",
+                                                            "label": "(Z)"
+                                                        }
+                                                    ],
+                                                    "type": "collection",
+                                                    "label": "Values"
+                                                }
+                                            ]
+                                        },
+                                        "insertDataOption": {
+                                            "mode": "chose",
+                                            "label": "Insert rows"
+                                        },
+                                        "valueInputOption": {
+                                            "mode": "chose",
+                                            "label": "User entered"
+                                        },
+                                        "insertUnformatted": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "google"
+                                            },
+                                            "label": "My Google connection (gratteur.barge.info@gmail.com)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:google",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "mode",
+                                        "type": "select",
+                                        "label": "Search Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "select",
+                                                "fromAll",
+                                                "map"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "insertUnformatted",
+                                        "type": "boolean",
+                                        "label": "Unformatted",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "valueInputOption",
+                                        "type": "select",
+                                        "label": "Value input option",
+                                        "validate": {
+                                            "enum": [
+                                                "USER_ENTERED",
+                                                "RAW"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "insertDataOption",
+                                        "type": "select",
+                                        "label": "Insert data option",
+                                        "validate": {
+                                            "enum": [
+                                                "INSERT_ROWS",
+                                                "OVERWRITE"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "from",
+                                        "type": "select",
+                                        "label": "Drive",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "drive",
+                                                "share",
+                                                "team"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "spreadsheetId",
+                                        "type": "file",
+                                        "label": "Spreadsheet ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "sheetId",
+                                        "type": "select",
+                                        "label": "Sheet Name",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "includesHeaders",
+                                        "type": "select",
+                                        "label": "Table contains headers",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                true,
+                                                false
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "values",
+                                        "spec": [
+                                            {
+                                                "name": "0",
+                                                "type": "text",
+                                                "label": "Username (A)"
+                                            },
+                                            {
+                                                "name": "1",
+                                                "type": "text",
+                                                "label": "User ID (B)"
+                                            },
+                                            {
+                                                "name": "2",
+                                                "type": "text",
+                                                "label": "Timestamp (C)"
+                                            },
+                                            {
+                                                "name": "3",
+                                                "type": "text",
+                                                "label": "Live Session (D)"
+                                            },
+                                            {
+                                                "name": "4",
+                                                "type": "text",
+                                                "label": "(E)"
+                                            },
+                                            {
+                                                "name": "5",
+                                                "type": "text",
+                                                "label": "(F)"
+                                            },
+                                            {
+                                                "name": "6",
+                                                "type": "text",
+                                                "label": "(G)"
+                                            },
+                                            {
+                                                "name": "7",
+                                                "type": "text",
+                                                "label": "(H)"
+                                            },
+                                            {
+                                                "name": "8",
+                                                "type": "text",
+                                                "label": "(I)"
+                                            },
+                                            {
+                                                "name": "9",
+                                                "type": "text",
+                                                "label": "(J)"
+                                            },
+                                            {
+                                                "name": "10",
+                                                "type": "text",
+                                                "label": "(K)"
+                                            },
+                                            {
+                                                "name": "11",
+                                                "type": "text",
+                                                "label": "(L)"
+                                            },
+                                            {
+                                                "name": "12",
+                                                "type": "text",
+                                                "label": "(M)"
+                                            },
+                                            {
+                                                "name": "13",
+                                                "type": "text",
+                                                "label": "(N)"
+                                            },
+                                            {
+                                                "name": "14",
+                                                "type": "text",
+                                                "label": "(O)"
+                                            },
+                                            {
+                                                "name": "15",
+                                                "type": "text",
+                                                "label": "(P)"
+                                            },
+                                            {
+                                                "name": "16",
+                                                "type": "text",
+                                                "label": "(Q)"
+                                            },
+                                            {
+                                                "name": "17",
+                                                "type": "text",
+                                                "label": "(R)"
+                                            },
+                                            {
+                                                "name": "18",
+                                                "type": "text",
+                                                "label": "(S)"
+                                            },
+                                            {
+                                                "name": "19",
+                                                "type": "text",
+                                                "label": "(T)"
+                                            },
+                                            {
+                                                "name": "20",
+                                                "type": "text",
+                                                "label": "(U)"
+                                            },
+                                            {
+                                                "name": "21",
+                                                "type": "text",
+                                                "label": "(V)"
+                                            },
+                                            {
+                                                "name": "22",
+                                                "type": "text",
+                                                "label": "(W)"
+                                            },
+                                            {
+                                                "name": "23",
+                                                "type": "text",
+                                                "label": "(X)"
+                                            },
+                                            {
+                                                "name": "24",
+                                                "type": "text",
+                                                "label": "(Y)"
+                                            },
+                                            {
+                                                "name": "25",
+                                                "type": "text",
+                                                "label": "(Z)"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Values"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "spreadsheetId",
+                                        "type": "text",
+                                        "label": "Spreadsheet ID"
+                                    },
+                                    {
+                                        "name": "tableRange",
+                                        "type": "text",
+                                        "label": "Table Range"
+                                    },
+                                    {
+                                        "name": "updates",
+                                        "spec": [
+                                            {
+                                                "name": "spreadsheetId",
+                                                "type": "text",
+                                                "label": "Spreadsheet ID"
+                                            },
+                                            {
+                                                "name": "updatedRange",
+                                                "type": "text",
+                                                "label": "Updated range"
+                                            },
+                                            {
+                                                "name": "updatedRows",
+                                                "type": "text",
+                                                "label": "Updated rows"
+                                            },
+                                            {
+                                                "name": "updatedColumns",
+                                                "type": "text",
+                                                "label": "Updated columns"
+                                            },
+                                            {
+                                                "name": "updatedCells",
+                                                "type": "text",
+                                                "label": "Updated cells"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Updates"
+                                    },
+                                    {
+                                        "name": "sheetName",
+                                        "type": "text",
+                                        "label": "Sheet"
+                                    },
+                                    {
+                                        "name": "rowNumber",
+                                        "type": "number",
+                                        "label": "Row Number"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 8,
+                            "module": "telegram:SendReplyMessage",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 8862186
+                            },
+                            "filter": {
+                                "name": "Déjà inscrit",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{11.`__IMTLENGTH__`}}",
+                                            "b": "0",
+                                            "o": "text:notequal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "text": "Tu es déjà inscrit au tirage ! 😉\r\n\r\nPas besoin de renvoyer \"GO\" !",
+                                "chatId": "{{2.message.chat.id}}",
+                                "parseMode": "",
+                                "replyMarkup": "",
+                                "messageThreadId": "",
+                                "replyToMessageId": "",
+                                "replyMarkupAssembleType": "reply_markup_enter"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 300
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "parseMode": {
+                                            "label": "Empty"
+                                        },
+                                        "disableNotification": {
+                                            "mode": "chose"
+                                        },
+                                        "replyMarkupAssembleType": {
+                                            "label": "Enter the Reply Markup"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "telegram"
+                                            },
+                                            "label": "Tirage Barge Bot"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:telegram",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "chatId",
+                                        "type": "text",
+                                        "label": "Chat ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "messageThreadId",
+                                        "type": "number",
+                                        "label": "Message Thread ID"
+                                    },
+                                    {
+                                        "name": "parseMode",
+                                        "type": "select",
+                                        "label": "Parse Mode",
+                                        "validate": {
+                                            "enum": [
+                                                "Markdown",
+                                                "HTML"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "disableNotification",
+                                        "type": "boolean",
+                                        "label": "Disable Notifications"
+                                    },
+                                    {
+                                        "name": "disableWebPagePreview",
+                                        "type": "boolean",
+                                        "label": "Disable Link Previews"
+                                    },
+                                    {
+                                        "name": "replyToMessageId",
+                                        "type": "number",
+                                        "label": "Original Message ID"
+                                    },
+                                    {
+                                        "name": "replyMarkupAssembleType",
+                                        "type": "select",
+                                        "label": "Enter/Assemble the Reply Markup Field",
+                                        "validate": {
+                                            "enum": [
+                                                "reply_markup_enter",
+                                                "reply_markup_assemble"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "replyMarkup",
+                                        "type": "text",
+                                        "label": "Reply Markup"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "message_id",
+                                        "type": "number",
+                                        "label": "Message ID"
+                                    },
+                                    {
+                                        "name": "sender_chat",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "number",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "title",
+                                                "type": "text",
+                                                "label": "Title"
+                                            },
+                                            {
+                                                "name": "username",
+                                                "type": "text",
+                                                "label": "Username"
+                                            },
+                                            {
+                                                "name": "type",
+                                                "type": "text",
+                                                "label": "Type"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Sender Chat"
+                                    },
+                                    {
+                                        "name": "chat",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "number",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "title",
+                                                "type": "text",
+                                                "label": "Title"
+                                            },
+                                            {
+                                                "name": "username",
+                                                "type": "text",
+                                                "label": "Username"
+                                            },
+                                            {
+                                                "name": "type",
+                                                "type": "text",
+                                                "label": "Type"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Chat"
+                                    },
+                                    {
+                                        "name": "date",
+                                        "type": "number",
+                                        "label": "Date"
+                                    },
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text"
+                                    },
+                                    {
+                                        "name": "entities",
+                                        "spec": {
+                                            "spec": [
+                                                {
+                                                    "name": "offset",
+                                                    "type": "number",
+                                                    "label": "Offset"
+                                                },
+                                                {
+                                                    "name": "length",
+                                                    "type": "number",
+                                                    "label": "Length"
+                                                },
+                                                {
+                                                    "name": "type",
+                                                    "type": "text",
+                                                    "label": "Type"
+                                                }
+                                            ],
+                                            "type": "collection"
+                                        },
+                                        "type": "array",
+                                        "label": "Entities"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu2.make.com",
+        "notes": []
+    }
+}
