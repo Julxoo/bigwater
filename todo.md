@@ -1,0 +1,2 @@
+- Message programmée
+- Message pré-enregistré
