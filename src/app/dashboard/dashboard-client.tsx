@@ -23,6 +23,13 @@ export default function DashboardClient() {
   const [stats, setStats] = useState<Stats>({ totalParticipants: 0 });
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [webhookStatus, setWebhookStatus] = useState("");
+  const [showCustomMessage, setShowCustomMessage] = useState(false);
+  const [customMessage, setCustomMessage] = useState("");
+  const [customPhotoUrl, setCustomPhotoUrl] = useState("");
+  const [isCustomLoading, setIsCustomLoading] = useState(false);
+  const [textareaRef, setTextareaRef] = useState<HTMLTextAreaElement | null>(
+    null
+  );
   const router = useRouter();
   const supabase = createClient();
 
@@ -185,6 +192,129 @@ export default function DashboardClient() {
     }
   };
 
+  const sendCustomMessage = async () => {
+    if (participants.length === 0) {
+      alert("Aucun participant à qui envoyer le message");
+      return;
+    }
+
+    if (!customMessage.trim()) {
+      alert("Veuillez saisir un message");
+      return;
+    }
+
+    const photoText = customPhotoUrl.trim() ? " avec photo" : "";
+    if (
+      !confirm(
+        `Êtes-vous sûr de vouloir envoyer ce message personnalisé${photoText} à tous les ${participants.length} participants ?`
+      )
+    ) {
+      return;
+    }
+
+    setIsCustomLoading(true);
+    try {
+      const response = await fetch("/api/broadcast-custom", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: customMessage,
+          photoUrl: customPhotoUrl,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          alert(
+            `Message personnalisé envoyé avec succès à ${data.successCount}/${
+              data.totalParticipants
+            } participants${data.hasPhoto ? " avec photo" : ""}`
+          );
+          // Réinitialiser le formulaire
+          setCustomMessage("");
+          setCustomPhotoUrl("");
+          setShowCustomMessage(false);
+        } else {
+          alert(`Erreur: ${data.message}`);
+        }
+      } else {
+        const errorData = await response.json();
+        alert(
+          `Erreur: ${errorData.error || "Erreur lors de l'envoi du message"}`
+        );
+      }
+    } catch (error) {
+      console.error("Erreur lors du broadcast personnalisé:", error);
+      alert("Erreur lors de l'envoi du message");
+    } finally {
+      setIsCustomLoading(false);
+    }
+  };
+
+  // Fonctions de formatage de texte
+  const insertFormatting = (
+    startTag: string,
+    endTag: string,
+    placeholder: string = ""
+  ) => {
+    if (!textareaRef) return;
+
+    const start = textareaRef.selectionStart;
+    const end = textareaRef.selectionEnd;
+    const selectedText = customMessage.substring(start, end);
+    const textToInsert = selectedText || placeholder;
+
+    const newText =
+      customMessage.substring(0, start) +
+      startTag +
+      textToInsert +
+      endTag +
+      customMessage.substring(end);
+
+    setCustomMessage(newText);
+
+    // Remettre le focus et la sélection
+    setTimeout(() => {
+      if (textareaRef) {
+        textareaRef.focus();
+        const newStart = start + startTag.length;
+        const newEnd = newStart + textToInsert.length;
+        textareaRef.setSelectionRange(newStart, newEnd);
+      }
+    }, 0);
+  };
+
+  const makeBold = () => insertFormatting("<b>", "</b>", "texte en gras");
+  const makeItalic = () => insertFormatting("<i>", "</i>", "texte en italique");
+  const insertLink = () => {
+    const url = prompt("Entrez l'URL du lien:");
+    if (url) {
+      insertFormatting(`<a href="${url}">`, "</a>", "texte du lien");
+    }
+  };
+  const insertEmoji = (emoji: string) => {
+    if (!textareaRef) return;
+    const start = textareaRef.selectionStart;
+    const newText =
+      customMessage.substring(0, start) +
+      emoji +
+      customMessage.substring(start);
+    setCustomMessage(newText);
+
+    setTimeout(() => {
+      if (textareaRef) {
+        textareaRef.focus();
+        textareaRef.setSelectionRange(
+          start + emoji.length,
+          start + emoji.length
+        );
+      }
+    }, 0);
+  };
+
   const handleLogout = async () => {
     setIsLoading(true);
     await supabase.auth.signOut();
@@ -262,18 +392,230 @@ export default function DashboardClient() {
           </div>
         </div>
 
-        {/* 4. Message - Bouton très visible sur mobile */}
-        <div className="bg-white rounded-xl shadow-sm p-4">
+        {/* 4. Messages - Section étendue */}
+        <div className="bg-white rounded-xl shadow-sm p-4 space-y-3">
+          {/* Message prédéfini */}
           <Button
             onClick={broadcastMessage}
             className="w-full bg-purple-600 hover:bg-purple-700 text-lg py-4 font-semibold"
             disabled={participants.length === 0 || isLoading}
           >
-            {isLoading ? "📤 Envoi en cours..." : "📤 Envoyer le message"}
+            {isLoading
+              ? "📤 Envoi en cours..."
+              : "📤 Envoyer le message: fin de Live"}
+          </Button>
+
+          {/* Bouton pour afficher/masquer le message personnalisé */}
+          <Button
+            onClick={() => setShowCustomMessage(!showCustomMessage)}
+            variant="outline"
+            className="w-full py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
+            disabled={participants.length === 0}
+          >
+            {showCustomMessage
+              ? "🔼 Masquer message personnalisé"
+              : "🔽 Message personnalisé"}
           </Button>
         </div>
 
-        {/* 5. Liste - Optimisée pour scroll mobile */}
+        {/* 5. Interface de message personnalisé - Intégrée */}
+        {showCustomMessage && (
+          <div className="bg-white rounded-xl shadow-sm p-4 space-y-4 border-l-4 border-blue-500">
+            <h3 className="font-bold text-gray-900 text-lg flex items-center">
+              ✏️ Message personnalisé
+            </h3>
+
+            {/* Zone de texte pour le message */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Votre message
+              </label>
+
+              {/* Boutons de formatage */}
+              <div className="flex flex-wrap gap-2 p-2 bg-gray-50 rounded-lg border">
+                <Button
+                  type="button"
+                  onClick={makeBold}
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-3 text-xs font-bold"
+                  disabled={isCustomLoading}
+                >
+                  <b>B</b>
+                </Button>
+                <Button
+                  type="button"
+                  onClick={makeItalic}
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-3 text-xs italic"
+                  disabled={isCustomLoading}
+                >
+                  <i>I</i>
+                </Button>
+                <Button
+                  type="button"
+                  onClick={insertLink}
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-3 text-xs"
+                  disabled={isCustomLoading}
+                >
+                  🔗 Lien
+                </Button>
+
+                <div className="border-l border-gray-300 h-8 mx-1"></div>
+
+                {/* Emojis populaires */}
+                <Button
+                  type="button"
+                  onClick={() => insertEmoji("🎉")}
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-2 text-xs"
+                  disabled={isCustomLoading}
+                >
+                  🎉
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => insertEmoji("🎯")}
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-2 text-xs"
+                  disabled={isCustomLoading}
+                >
+                  🎯
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => insertEmoji("🍀")}
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-2 text-xs"
+                  disabled={isCustomLoading}
+                >
+                  🍀
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => insertEmoji("⚡")}
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-2 text-xs"
+                  disabled={isCustomLoading}
+                >
+                  ⚡
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => insertEmoji("🎰")}
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-2 text-xs"
+                  disabled={isCustomLoading}
+                >
+                  🎰
+                </Button>
+              </div>
+
+              <textarea
+                ref={setTextareaRef}
+                value={customMessage}
+                onChange={(e) => setCustomMessage(e.target.value)}
+                placeholder="Écrivez votre message ici...\n\nUtilisez les boutons ci-dessus pour formater votre texte !"
+                className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows={6}
+                disabled={isCustomLoading}
+              />
+              <div className="flex justify-between items-center text-xs text-gray-500">
+                <span>{customMessage.length} caractères</span>
+                <span className="text-blue-600">
+                  💡 Sélectionnez du texte puis cliquez sur B ou I pour le
+                  formater
+                </span>
+              </div>
+            </div>
+
+            {/* URL de la photo (optionnel) */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                URL de la photo (optionnel)
+              </label>
+              <input
+                type="url"
+                value={customPhotoUrl}
+                onChange={(e) => setCustomPhotoUrl(e.target.value)}
+                placeholder="https://exemple.com/image.jpg"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                disabled={isCustomLoading}
+              />
+              {customPhotoUrl && (
+                <div className="text-xs text-green-600">
+                  📸 Photo sera incluse dans le message
+                </div>
+              )}
+            </div>
+
+            {/* Aperçu */}
+            {customMessage.trim() && (
+              <div className="bg-gray-50 p-3 rounded-lg border">
+                <div className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                  👀 Aperçu du message
+                </div>
+                <div className="text-sm text-gray-900 bg-white p-3 rounded border shadow-sm">
+                  {customPhotoUrl.trim() && (
+                    <div className="flex items-center text-xs text-blue-600 mb-2 bg-blue-50 p-2 rounded">
+                      📸{" "}
+                      <span className="ml-1">
+                        Photo incluse:{" "}
+                        {customPhotoUrl.length > 40
+                          ? customPhotoUrl.substring(0, 40) + "..."
+                          : customPhotoUrl}
+                      </span>
+                    </div>
+                  )}
+                  <div
+                    className="whitespace-pre-wrap leading-relaxed"
+                    dangerouslySetInnerHTML={{
+                      __html: customMessage.replace(/\n/g, "<br>"),
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Boutons d'action */}
+            <div className="flex space-x-3">
+              <Button
+                onClick={sendCustomMessage}
+                className="flex-1 bg-green-600 hover:bg-green-700 py-3"
+                disabled={
+                  !customMessage.trim() ||
+                  isCustomLoading ||
+                  participants.length === 0
+                }
+              >
+                {isCustomLoading
+                  ? "📤 Envoi en cours..."
+                  : "📤 Envoyer le message personnalisé"}
+              </Button>
+              <Button
+                onClick={() => {
+                  setCustomMessage("");
+                  setCustomPhotoUrl("");
+                }}
+                variant="outline"
+                className="px-4 py-3"
+                disabled={isCustomLoading}
+              >
+                🗑️
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* 6. Liste - Optimisée pour scroll mobile */}
         {participants.length > 0 ? (
           <div className="bg-white rounded-xl shadow-sm p-4">
             <h3 className="font-bold text-gray-900 mb-3 text-lg">
