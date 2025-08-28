@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface Stats {
   totalParticipants: number;
@@ -26,7 +27,10 @@ export default function DashboardClient() {
   const [showCustomMessage, setShowCustomMessage] = useState(false);
   const [customMessage, setCustomMessage] = useState("");
   const [customPhotoUrl, setCustomPhotoUrl] = useState("");
+  const [customPhotoFile, setCustomPhotoFile] = useState<File | null>(null);
   const [isCustomLoading, setIsCustomLoading] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
   const [textareaRef, setTextareaRef] = useState<HTMLTextAreaElement | null>(
     null
   );
@@ -203,17 +207,35 @@ export default function DashboardClient() {
       return;
     }
 
-    const photoText = customPhotoUrl.trim() ? " avec photo" : "";
-    if (
-      !confirm(
-        `Êtes-vous sûr de vouloir envoyer ce message personnalisé${photoText} à tous les ${participants.length} participants ?`
-      )
-    ) {
-      return;
-    }
-
     setIsCustomLoading(true);
+
     try {
+      let finalPhotoUrl = customPhotoUrl;
+
+      // Si on a un fichier local, l'uploader d'abord
+      if (customPhotoFile && customPhotoUrl.startsWith("blob:")) {
+        const uploadedUrl = await uploadPhoto(customPhotoFile);
+        if (uploadedUrl) {
+          finalPhotoUrl = uploadedUrl;
+          // Nettoyer l'URL temporaire
+          URL.revokeObjectURL(customPhotoUrl);
+          setCustomPhotoUrl(uploadedUrl);
+        } else {
+          // Erreur d'upload, mais on peut continuer sans photo
+          finalPhotoUrl = "";
+        }
+      }
+
+      const photoText = finalPhotoUrl ? " avec photo" : "";
+      if (
+        !confirm(
+          `Êtes-vous sûr de vouloir envoyer ce message personnalisé${photoText} à tous les ${participants.length} participants ?`
+        )
+      ) {
+        setIsCustomLoading(false);
+        return;
+      }
+
       const response = await fetch("/api/broadcast-custom", {
         method: "POST",
         headers: {
@@ -221,7 +243,7 @@ export default function DashboardClient() {
         },
         body: JSON.stringify({
           message: customMessage,
-          photoUrl: customPhotoUrl,
+          photoUrl: finalPhotoUrl,
         }),
       });
 
@@ -235,7 +257,7 @@ export default function DashboardClient() {
           );
           // Réinitialiser le formulaire
           setCustomMessage("");
-          setCustomPhotoUrl("");
+          removePhoto();
           setShowCustomMessage(false);
         } else {
           alert(`Erreur: ${data.message}`);
@@ -313,6 +335,80 @@ export default function DashboardClient() {
         );
       }
     }, 0);
+  };
+
+  // Fonctions de gestion des fichiers
+  const handleFileSelect = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      alert("Veuillez sélectionner une image valide");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("L'image ne doit pas dépasser 5MB");
+      return;
+    }
+
+    setCustomPhotoFile(file);
+    // Créer une URL temporaire pour l'aperçu
+    const tempUrl = URL.createObjectURL(file);
+    setCustomPhotoUrl(tempUrl);
+  };
+
+  const uploadPhoto = async (file: File): Promise<string | null> => {
+    setIsUploadingPhoto(true);
+    try {
+      const formData = new FormData();
+      formData.append("photo", file);
+
+      const response = await fetch("/api/upload-photo", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.url;
+      } else {
+        const errorData = await response.json();
+        alert(`Erreur upload: ${errorData.error}`);
+        return null;
+      }
+    } catch (error) {
+      console.error("Erreur upload photo:", error);
+      alert("Erreur lors de l'upload de la photo");
+      return null;
+    } finally {
+      setIsUploadingPhoto(false);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFileSelect(files[0]);
+    }
+  };
+
+  const removePhoto = () => {
+    if (customPhotoUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(customPhotoUrl);
+    }
+    setCustomPhotoFile(null);
+    setCustomPhotoUrl("");
   };
 
   const handleLogout = async () => {
@@ -537,22 +633,118 @@ export default function DashboardClient() {
               </div>
             </div>
 
-            {/* URL de la photo (optionnel) */}
+            {/* Upload de photo */}
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
-                URL de la photo (optionnel)
+                Photo (optionnel)
               </label>
-              <input
-                type="url"
-                value={customPhotoUrl}
-                onChange={(e) => setCustomPhotoUrl(e.target.value)}
-                placeholder="https://exemple.com/image.jpg"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                disabled={isCustomLoading}
-              />
-              {customPhotoUrl && (
-                <div className="text-xs text-green-600">
-                  📸 Photo sera incluse dans le message
+
+              {!customPhotoFile && !customPhotoUrl ? (
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={`relative border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+                    dragOver
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-300 hover:border-gray-400"
+                  } ${isCustomLoading ? "opacity-50" : ""}`}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileSelect(file);
+                    }}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    disabled={isCustomLoading}
+                  />
+                  <div className="space-y-2">
+                    <div className="text-4xl">📷</div>
+                    <div className="text-sm text-gray-600">
+                      <span className="font-medium text-blue-600">
+                        Cliquez pour choisir
+                      </span>{" "}
+                      ou glissez-déposez une image
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      JPG, PNG, GIF jusqu&apos;à 5MB
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center space-x-3">
+                      {customPhotoUrl && (
+                        <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                          <Image
+                            src={customPhotoUrl}
+                            alt="Aperçu"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display =
+                                "none";
+                            }}
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-gray-900 truncate">
+                          {customPhotoFile
+                            ? customPhotoFile.name
+                            : "Image sélectionnée"}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {customPhotoFile
+                            ? `${(customPhotoFile.size / 1024 / 1024).toFixed(
+                                1
+                              )} MB`
+                            : "Image prête"}
+                        </div>
+                        {isUploadingPhoto && (
+                          <div className="text-xs text-blue-600 mt-1">
+                            📎 Upload en cours...
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={removePhoto}
+                      variant="outline"
+                      size="sm"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      disabled={isCustomLoading || isUploadingPhoto}
+                    >
+                      ✕
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Option alternative: saisie d'URL */}
+              {!customPhotoFile && !customPhotoUrl && (
+                <div className="pt-2">
+                  <details className="group">
+                    <summary className="cursor-pointer text-xs text-gray-500 hover:text-gray-700">
+                      🔗 Ou utiliser une URL d&apos;image
+                    </summary>
+                    <div className="mt-2">
+                      <input
+                        type="url"
+                        placeholder="https://exemple.com/image.jpg"
+                        className="w-full p-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+                        onBlur={(e) => {
+                          if (e.target.value.trim()) {
+                            setCustomPhotoUrl(e.target.value.trim());
+                          }
+                        }}
+                        disabled={isCustomLoading}
+                      />
+                    </div>
+                  </details>
                 </div>
               )}
             </div>
@@ -564,15 +756,29 @@ export default function DashboardClient() {
                   👀 Aperçu du message
                 </div>
                 <div className="text-sm text-gray-900 bg-white p-3 rounded border shadow-sm">
-                  {customPhotoUrl.trim() && (
-                    <div className="flex items-center text-xs text-blue-600 mb-2 bg-blue-50 p-2 rounded">
-                      📸{" "}
-                      <span className="ml-1">
-                        Photo incluse:{" "}
-                        {customPhotoUrl.length > 40
-                          ? customPhotoUrl.substring(0, 40) + "..."
-                          : customPhotoUrl}
-                      </span>
+                  {(customPhotoUrl || customPhotoFile) && (
+                    <div className="flex items-start space-x-2 text-xs text-blue-600 mb-3 bg-blue-50 p-3 rounded">
+                      <div className="flex-shrink-0">
+                        {customPhotoUrl && (
+                          <Image
+                            src={customPhotoUrl}
+                            alt="Aperçu photo"
+                            className="w-12 h-12 object-cover rounded border"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display =
+                                "none";
+                            }}
+                          />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium">📸 Photo incluse</div>
+                        <div className="text-gray-600 truncate">
+                          {customPhotoFile
+                            ? customPhotoFile.name
+                            : "Image depuis URL"}
+                        </div>
+                      </div>
                     </div>
                   )}
                   <div
