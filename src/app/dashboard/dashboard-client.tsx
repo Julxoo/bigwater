@@ -8,6 +8,7 @@ import Image from "next/image";
 
 interface Stats {
   totalParticipants: number;
+  totalAllParticipants: number;
 }
 
 interface Participant {
@@ -21,12 +22,13 @@ interface Participant {
 
 export default function DashboardClient() {
   const [isLoading, setIsLoading] = useState(false);
-  const [stats, setStats] = useState<Stats>({ totalParticipants: 0 });
+  const [stats, setStats] = useState<Stats>({ totalParticipants: 0, totalAllParticipants: 0 });
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [webhookStatus, setWebhookStatus] = useState("");
   const [showCustomMessage, setShowCustomMessage] = useState(false);
   const [customMessage, setCustomMessage] = useState("");
   const [customPhotoUrl, setCustomPhotoUrl] = useState("");
+  const [showBroadcastOptions, setShowBroadcastOptions] = useState(false);
   const [customPhotoFile, setCustomPhotoFile] = useState<File | null>(null);
   const [isCustomLoading, setIsCustomLoading] = useState(false);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
@@ -113,7 +115,7 @@ export default function DashboardClient() {
   const clearParticipants = async () => {
     if (
       !confirm(
-        "Êtes-vous sûr de vouloir vider la liste des participants ? Cette action est irréversible."
+        `Êtes-vous sûr de vouloir vider la liste des participants du tirage actuel ?\n\nCela supprimera ${stats.totalParticipants} participants du tirage en cours.\nL'historique complet (${stats.totalAllParticipants} participants) sera préservé.\n\nCette action est irréversible.`
       )
     ) {
       return;
@@ -125,7 +127,7 @@ export default function DashboardClient() {
       });
 
       if (response.ok) {
-        alert("Liste des participants vidée avec succès!");
+        alert("Liste des participants du tirage actuel vidée avec succès!\n\nL'historique complet est préservé.");
         fetchStats(); // Rafraîchir les stats
         fetchParticipants(); // Rafraîchir la liste
       } else {
@@ -156,15 +158,18 @@ export default function DashboardClient() {
       });
   };
 
-  const broadcastMessage = async () => {
-    if (participants.length === 0) {
-      alert("Aucun participant à qui envoyer le message");
+  const broadcastMessage = async (targetType: 'current' | 'all') => {
+    const targetCount = targetType === 'current' ? participants.length : stats.totalAllParticipants;
+    const targetDescription = targetType === 'current' ? 'participants du tirage actuel' : 'participants de l\'historique complet';
+    
+    if (targetCount === 0) {
+      alert(`Aucun ${targetDescription} à qui envoyer le message`);
       return;
     }
 
     if (
       !confirm(
-        `Êtes-vous sûr de vouloir envoyer le message promotionnel à tous les ${participants.length} participants ?`
+        `Êtes-vous sûr de vouloir envoyer le message "fin de Live" à tous les ${targetCount} ${targetDescription} ?`
       )
     ) {
       return;
@@ -172,7 +177,8 @@ export default function DashboardClient() {
 
     setIsLoading(true);
     try {
-      const response = await fetch("/api/broadcast", {
+      const endpoint = targetType === 'current' ? "/api/broadcast" : "/api/broadcast-all";
+      const response = await fetch(endpoint, {
         method: "POST",
       });
 
@@ -180,7 +186,7 @@ export default function DashboardClient() {
         const data = await response.json();
         if (data.success) {
           alert(
-            `Message envoyé avec succès à ${data.successCount}/${data.totalParticipants} participants`
+            `Message envoyé avec succès à ${data.successCount}/${data.totalParticipants} ${targetDescription}`
           );
         } else {
           alert(`Erreur: ${data.message}`);
@@ -193,12 +199,16 @@ export default function DashboardClient() {
       alert("Erreur lors de l'envoi du message");
     } finally {
       setIsLoading(false);
+      setShowBroadcastOptions(false);
     }
   };
 
-  const sendCustomMessage = async () => {
-    if (participants.length === 0) {
-      alert("Aucun participant à qui envoyer le message");
+  const sendCustomMessage = async (targetType: 'current' | 'all') => {
+    const targetCount = targetType === 'current' ? participants.length : stats.totalAllParticipants;
+    const targetDescription = targetType === 'current' ? 'participants du tirage actuel' : 'participants de l\'historique complet';
+    
+    if (targetCount === 0) {
+      alert(`Aucun ${targetDescription} à qui envoyer le message`);
       return;
     }
 
@@ -229,14 +239,15 @@ export default function DashboardClient() {
       const photoText = finalPhotoUrl ? " avec photo" : "";
       if (
         !confirm(
-          `Êtes-vous sûr de vouloir envoyer ce message personnalisé${photoText} à tous les ${participants.length} participants ?`
+          `Êtes-vous sûr de vouloir envoyer ce message personnalisé${photoText} à tous les ${targetCount} ${targetDescription} ?`
         )
       ) {
         setIsCustomLoading(false);
         return;
       }
 
-      const response = await fetch("/api/broadcast-custom", {
+      const endpoint = targetType === 'current' ? "/api/broadcast-custom" : "/api/broadcast-custom-all";
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -253,7 +264,7 @@ export default function DashboardClient() {
           alert(
             `Message personnalisé envoyé avec succès à ${data.successCount}/${
               data.totalParticipants
-            } participants${data.hasPhoto ? " avec photo" : ""}`
+            } ${targetDescription}${data.hasPhoto ? " avec photo" : ""}`
           );
           // Réinitialiser le formulaire
           setCustomMessage("");
@@ -433,12 +444,23 @@ export default function DashboardClient() {
       </div>
 
       <div className="space-y-3">
-        {/* 1. Nombre de participants - Plus grand sur mobile */}
-        <div className="bg-white rounded-xl shadow-sm p-6 text-center">
-          <h2 className="text-5xl font-bold text-gray-900 mb-1">
-            {stats.totalParticipants}
-          </h2>
-          <p className="text-gray-600 text-lg">participants</p>
+        {/* 1. Statistiques - Cartes séparées sur mobile */}
+        <div className="grid grid-cols-1 gap-3">
+          {/* Participants actuels (tirage en cours) */}
+          <div className="bg-white rounded-xl shadow-sm p-6 text-center border-l-4 border-blue-500">
+            <h2 className="text-4xl font-bold text-blue-600 mb-1">
+              {stats.totalParticipants}
+            </h2>
+            <p className="text-gray-600 text-sm">participants au tirage actuel</p>
+          </div>
+          
+          {/* Tous les participants (historique) */}
+          <div className="bg-white rounded-xl shadow-sm p-6 text-center border-l-4 border-green-500">
+            <h2 className="text-4xl font-bold text-green-600 mb-1">
+              {stats.totalAllParticipants}
+            </h2>
+            <p className="text-gray-600 text-sm">participants au total (historique)</p>
+          </div>
         </div>
 
         {/* 2. Webhook - Compact pour mobile */}
@@ -483,23 +505,60 @@ export default function DashboardClient() {
               onClick={clearParticipants}
               className="bg-red-600 hover:bg-red-700 py-3"
             >
-              🗑️ Vider
+              🗑️ Vider tirage
             </Button>
           </div>
         </div>
 
         {/* 4. Messages - Section étendue */}
         <div className="bg-white rounded-xl shadow-sm p-4 space-y-3">
-          {/* Message prédéfini */}
-          <Button
-            onClick={broadcastMessage}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-lg py-4 font-semibold"
-            disabled={participants.length === 0 || isLoading}
-          >
-            {isLoading
-              ? "📤 Envoi en cours..."
-              : "📤 Envoyer le message: fin de Live"}
-          </Button>
+          {/* Message prédéfini avec options */}
+          {!showBroadcastOptions ? (
+            <Button
+              onClick={() => setShowBroadcastOptions(true)}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-lg py-4 font-semibold"
+              disabled={stats.totalParticipants === 0 && stats.totalAllParticipants === 0 || isLoading}
+            >
+              {isLoading
+                ? "📤 Envoi en cours..."
+                : "📤 Envoyer le message: fin de Live"}
+            </Button>
+          ) : (
+            <div className="space-y-3 p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
+              <div className="text-center">
+                <h4 className="font-semibold text-purple-800 mb-3">
+                  Choisir les destinataires du message &quot;fin de Live&quot;
+                </h4>
+              </div>
+              
+              <div className="grid grid-cols-1 gap-3">
+                <Button
+                  onClick={() => broadcastMessage('current')}
+                  className="w-full bg-blue-600 hover:bg-blue-700 py-3"
+                  disabled={stats.totalParticipants === 0 || isLoading}
+                >
+                  📤 Tirage actuel ({stats.totalParticipants} participants)
+                </Button>
+                
+                <Button
+                  onClick={() => broadcastMessage('all')}
+                  className="w-full bg-green-600 hover:bg-green-700 py-3"
+                  disabled={stats.totalAllParticipants === 0 || isLoading}
+                >
+                  📤 Historique complet ({stats.totalAllParticipants} participants)
+                </Button>
+              </div>
+              
+              <Button
+                onClick={() => setShowBroadcastOptions(false)}
+                variant="outline"
+                className="w-full py-2 text-sm"
+                disabled={isLoading}
+              >
+                ❌ Annuler
+              </Button>
+            </div>
+          )}
 
           {/* Bouton pour afficher/masquer le message personnalisé */}
           <Button
@@ -792,20 +851,40 @@ export default function DashboardClient() {
             )}
 
             {/* Boutons d'action */}
-            <div className="flex space-x-3">
-              <Button
-                onClick={sendCustomMessage}
-                className="flex-1 bg-green-600 hover:bg-green-700 py-3"
-                disabled={
-                  !customMessage.trim() ||
-                  isCustomLoading ||
-                  participants.length === 0
-                }
-              >
-                {isCustomLoading
-                  ? "📤 Envoi en cours..."
-                  : "📤 Envoyer le message personnalisé"}
-              </Button>
+            <div className="space-y-3">
+              <div className="text-sm font-medium text-gray-700 mb-2">
+                Choisir les destinataires :
+              </div>
+              
+              <div className="grid grid-cols-1 gap-2">
+                <Button
+                  onClick={() => sendCustomMessage('current')}
+                  className="w-full bg-blue-600 hover:bg-blue-700 py-3"
+                  disabled={
+                    !customMessage.trim() ||
+                    isCustomLoading ||
+                    stats.totalParticipants === 0
+                  }
+                >
+                  {isCustomLoading
+                    ? "📤 Envoi en cours..."
+                    : `📤 Tirage actuel (${stats.totalParticipants})`}
+                </Button>
+                
+                <Button
+                  onClick={() => sendCustomMessage('all')}
+                  className="w-full bg-green-600 hover:bg-green-700 py-3"
+                  disabled={
+                    !customMessage.trim() ||
+                    isCustomLoading ||
+                    stats.totalAllParticipants === 0
+                  }
+                >
+                  {isCustomLoading
+                    ? "📤 Envoi en cours..."
+                    : `📤 Historique complet (${stats.totalAllParticipants})`}
+                </Button>
+              </div>
               <Button
                 onClick={() => {
                   setCustomMessage("");
@@ -825,7 +904,7 @@ export default function DashboardClient() {
         {participants.length > 0 ? (
           <div className="bg-white rounded-xl shadow-sm p-4">
             <h3 className="font-bold text-gray-900 mb-3 text-lg">
-              Liste des participants
+              Liste des participants (tirage actuel)
             </h3>
             <div className="max-h-96 overflow-y-auto space-y-2">
               {participants.map((participant, index) => (

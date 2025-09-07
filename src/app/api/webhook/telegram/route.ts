@@ -108,15 +108,32 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient();
     let isNewParticipant = false;
 
-    // Vérifier si l'utilisateur existe déjà
+    // Vérifier si l'utilisateur existe déjà dans la table temporaire
     const { data: existingUser } = await supabase
       .from("participants")
       .select("id")
       .eq("telegram_user_id", message.from.id)
       .single();
 
+    // TOUJOURS enregistrer/mettre à jour dans la table persistante
+    const { error: allParticipantsError } = await supabase
+      .from("all_participants")
+      .upsert({
+        telegram_user_id: message.from.id,
+        first_name: message.from.first_name,
+        last_name: message.from.last_name,
+        username: message.from.username,
+        last_participation: new Date().toISOString(),
+      }, {
+        onConflict: 'telegram_user_id'
+      });
+
+    if (allParticipantsError) {
+      console.error("Erreur lors de l'ajout dans all_participants:", allParticipantsError);
+    }
+
     if (existingUser) {
-      // Utilisateur existe déjà, mettre à jour ses infos
+      // Utilisateur existe déjà dans la table temporaire, mettre à jour ses infos
       await supabase
         .from("participants")
         .update({
@@ -136,7 +153,7 @@ export async function POST(request: NextRequest) {
         `Salut ${message.from.first_name} ! 👋\n\nTu es déjà inscrit(e) au tirage au sort ! 🎯\n\nTu peux maintenant attendre le résultat du tirage. Bonne chance ! 🍀`
       );
     } else {
-      // Nouvel utilisateur
+      // Nouvel utilisateur dans la table temporaire
       const { error } = await supabase.from("participants").insert({
         telegram_user_id: message.from.id,
         first_name: message.from.first_name,
