@@ -29,6 +29,7 @@ export default function DashboardClient() {
   const [customMessage, setCustomMessage] = useState("");
   const [customPhotoUrl, setCustomPhotoUrl] = useState("");
   const [showBroadcastOptions, setShowBroadcastOptions] = useState(false);
+  const [showCustomOptions, setShowCustomOptions] = useState(false);
   const [customPhotoFile, setCustomPhotoFile] = useState<File | null>(null);
   const [isCustomLoading, setIsCustomLoading] = useState(false);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
@@ -270,6 +271,7 @@ export default function DashboardClient() {
           setCustomMessage("");
           removePhoto();
           setShowCustomMessage(false);
+          setShowCustomOptions(false);
         } else {
           alert(`Erreur: ${data.message}`);
         }
@@ -565,7 +567,7 @@ export default function DashboardClient() {
             onClick={() => setShowCustomMessage(!showCustomMessage)}
             variant="outline"
             className="w-full py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
-            disabled={participants.length === 0}
+            disabled={stats.totalParticipants === 0 && stats.totalAllParticipants === 0}
           >
             {showCustomMessage
               ? "🔼 Masquer message personnalisé"
@@ -851,40 +853,72 @@ export default function DashboardClient() {
             )}
 
             {/* Boutons d'action */}
-            <div className="space-y-3">
-              <div className="text-sm font-medium text-gray-700 mb-2">
-                Choisir les destinataires :
-              </div>
-              
-              <div className="grid grid-cols-1 gap-2">
+            {!showCustomOptions ? (
+              <div className="space-y-3">
                 <Button
-                  onClick={() => sendCustomMessage('current')}
-                  className="w-full bg-blue-600 hover:bg-blue-700 py-3"
+                  onClick={() => setShowCustomOptions(true)}
+                  className="w-full bg-green-600 hover:bg-green-700 py-4 font-semibold"
                   disabled={
                     !customMessage.trim() ||
                     isCustomLoading ||
-                    stats.totalParticipants === 0
+                    (stats.totalParticipants === 0 && stats.totalAllParticipants === 0)
                   }
                 >
                   {isCustomLoading
                     ? "📤 Envoi en cours..."
-                    : `📤 Tirage actuel (${stats.totalParticipants})`}
+                    : "📤 Envoyer le message personnalisé"}
                 </Button>
+              </div>
+            ) : (
+              <div className="space-y-3 p-4 bg-green-50 rounded-lg border-2 border-green-200">
+                <div className="text-center">
+                  <h4 className="font-semibold text-green-800 mb-3">
+                    Choisir les destinataires du message personnalisé
+                  </h4>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-3">
+                  <Button
+                    onClick={() => sendCustomMessage('current')}
+                    className="w-full bg-blue-600 hover:bg-blue-700 py-3"
+                    disabled={
+                      !customMessage.trim() ||
+                      isCustomLoading ||
+                      stats.totalParticipants === 0
+                    }
+                  >
+                    {isCustomLoading
+                      ? "📤 Envoi en cours..."
+                      : `📤 Tirage actuel (${stats.totalParticipants} participants)`}
+                  </Button>
+                  
+                  <Button
+                    onClick={() => sendCustomMessage('all')}
+                    className="w-full bg-green-600 hover:bg-green-700 py-3"
+                    disabled={
+                      !customMessage.trim() ||
+                      isCustomLoading ||
+                      stats.totalAllParticipants === 0
+                    }
+                  >
+                    {isCustomLoading
+                      ? "📤 Envoi en cours..."
+                      : `📤 Historique complet (${stats.totalAllParticipants} participants)`}
+                  </Button>
+                </div>
                 
                 <Button
-                  onClick={() => sendCustomMessage('all')}
-                  className="w-full bg-green-600 hover:bg-green-700 py-3"
-                  disabled={
-                    !customMessage.trim() ||
-                    isCustomLoading ||
-                    stats.totalAllParticipants === 0
-                  }
+                  onClick={() => setShowCustomOptions(false)}
+                  variant="outline"
+                  className="w-full py-2 text-sm"
+                  disabled={isCustomLoading}
                 >
-                  {isCustomLoading
-                    ? "📤 Envoi en cours..."
-                    : `📤 Historique complet (${stats.totalAllParticipants})`}
+                  ❌ Annuler
                 </Button>
               </div>
+            )}
+            
+            <div className="flex space-x-3">
               <Button
                 onClick={() => {
                   setCustomMessage("");
